@@ -2,6 +2,10 @@
 
 A website written in noir.
 
+Barelly functionnal for now. Every time the server is started, the
+tables in the database are droped and seeded with default values, so
+beware.
+
 ## Usage
 
 ```bash
