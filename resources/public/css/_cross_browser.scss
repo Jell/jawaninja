@@ -1,0 +1,17 @@
+@mixin vertical-gradient($start-color, $end-color) {
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$start-color}', endColorstr='#{$end-color}'); /* for IE */
+  background: -webkit-gradient(linear, left top, left bottom, from($start-color), to($end-color)); /* for webkit browsers */
+  background: -moz-linear-gradient(top,  $start-color, $end-color); /* for firefox 3.6+ */
+}
+
+@mixin rounded($radius){
+  border-radius: $radius;
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+}
+
+@mixin shadow($radius, $x-offset, $y-offset, $color: #888) {
+  -webkit-box-shadow: $radius $x-offset $y-offset $color;
+  -moz-box-shadow: $radius $x-offset $y-offset $color;
+  box-shadow: $radius $x-offset $y-offset $color;
+}
