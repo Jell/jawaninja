@@ -10,8 +10,9 @@
   -webkit-border-radius: $radius;
 }
 
-@mixin shadow($radius, $x-offset, $y-offset, $color: #888) {
-  -webkit-box-shadow: $radius $x-offset $y-offset $color;
-  -moz-box-shadow: $radius $x-offset $y-offset $color;
-  box-shadow: $radius $x-offset $y-offset $color;
+@mixin shadow($x-offset, $y-offset, $radius,  $color: #888) {
+  -webkit-box-shadow: $x-offset $y-offset $radius $color;
+  -moz-box-shadow: $x-offset $y-offset $radius $color;
+  box-shadow: $x-offset $y-offset $radius $color;
 }
+

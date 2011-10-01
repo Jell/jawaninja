@@ -30,6 +30,14 @@
 
 ;; Partials
 
+(defpartial header []
+  [:div#header
+      [:div#sun2]
+    [:h1 (link-to "/blog/" "Jawaninja")]
+    [:ul.nav
+      (map link-item main-links)]
+   ])
+
 (defpartial about []
   [:div.right-panel
     [:img {:src "/img/profile.jpg" :alt "profile picture" :width "150px" :height "150px"}]
@@ -58,15 +66,16 @@
   (html5
     (build-head [:reset :default :jquery :blog.js])
     [:body
-        (github-banner)
-     [:div#wrapper
-      [:div.content
-       [:div#header
-        [:h1 (link-to "/blog/" "Jawaninja")]
-        [:ul.nav
-         (map link-item main-links)]
+     [:div#page
+      (github-banner)
+     [:div#sun1]
+      [:div#wrapper
+        [:div.content
+          (header)
+          content
+          (about)
+          (social)
         ]
-       content
-       (about)
-       (social)]
-       ]]))
+       ]
+      ]
+    ]))

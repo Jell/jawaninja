@@ -31,7 +31,15 @@
     (catch Exception _)))
 
 (defn- create-default-post []
-  (create-post "Welcome" "This is my __first__ post!"))
+  (create-post "Welcome" "This is my __first__ post `print 'hello'`!
+
+    class Test
+      def test
+        puts 'hello!'
+      end
+    end
+
+"))
 
 (defn all-posts
   "Return all the rows of the posts table as a vector"
