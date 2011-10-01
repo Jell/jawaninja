@@ -159,10 +159,13 @@ input + textarea { margin-top:10px; }
   }
 
   h1 {
+    margin-top: -50px;
     float:left;
     display:inline;
     color:$titles-color;
-    padding-top: 15px;
+    padding-top: 0px;
+    font-size: 300%;
+    font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", sans-serif;
     a { color:$titles-color; }
   }
 
@@ -176,6 +179,7 @@ input + textarea { margin-top:10px; }
       float:left;
       display:inline;
       margin-left:15px;
+    @include transform(rotate(315deg));
     }
   }
 }

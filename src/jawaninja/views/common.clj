@@ -35,7 +35,7 @@
       [:div#sun2]
     [:h1 (link-to "/blog/" "Jawaninja")]
     [:ul.nav
-      (map link-item main-links)]
+      (map link-item admin-links)]
    ])
 
 (defpartial about []
