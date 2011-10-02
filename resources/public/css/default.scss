@@ -143,7 +143,7 @@ input + textarea { margin-top:10px; }
 
 #wrapper {
   margin: 0 auto;
-  min-width: 320px;
+  min-width: 300px;
   width:90%;
   padding-top:50px;
 }
@@ -151,7 +151,6 @@ input + textarea { margin-top:10px; }
 #wrapper > div.content {
   float:left;
   display:inline;
-  padding-bottom:100px;
 }
 
 #header {
@@ -159,8 +158,8 @@ input + textarea { margin-top:10px; }
   display:inline;
   width:75%;
   padding-left: 25%;
-  margin-top: 80px;
-  margin-bottom:30px;
+  margin-top: 90px;
+  margin-bottom:10px;
 
   img {
     float: left;
@@ -172,8 +171,8 @@ input + textarea { margin-top:10px; }
     display:inline;
     color:$titles-color;
     padding-top: 0px;
-    padding-left: 5px;
-    font-size: 300%;
+    padding-left: 20px;
+    font-size: 250%;
     font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", sans-serif;
     a { color:$titles-color; }
   }
@@ -182,7 +181,7 @@ input + textarea { margin-top:10px; }
     float:right;
     display:inline;
     margin-top:15px;
-    margin-right:80px;
+    margin-right:10%;
 
     li {
       float:left;
@@ -248,13 +247,14 @@ ul.items {
 ul.posts {
   float:left;
   display:inline;
-    min-width: 320px;
+    min-width: 300px;
     max-width: 800px;
-    width: 95%;
+    width: 100%;
+    margin-right: -80px;
   li.post {
     float:left;
     display:inline;
-    width: 97%;
+    width: 88%;
     padding:15px;
     background: #3a3b3b;
     @include rounded(10px);
@@ -290,4 +290,8 @@ ul.posts {
 \*------------------------------------*/
 @media screen and (max-device-width: 480px){
 /*--- iPhone only CSS here ---*/
+  #sun1 {
+    right: 120px;
+  }
 }
+
