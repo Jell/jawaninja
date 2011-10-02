@@ -66,8 +66,8 @@
   (html5
     (build-head [:reset :default :jquery :blog.js])
     [:body
-     [:div#page
       (github-banner)
+     [:div#page
      [:div#sun1]
       [:div#wrapper
         [:div.content
