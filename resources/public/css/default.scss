@@ -104,14 +104,27 @@ div.content {
   background: transparent;
 }
 
-input {
-  background:#3a3b3b;
-  border:2px solid #4a4b4b;
-  @include rounded(8px);
-  padding:10px;
-  width: 590px;
-  color:#babbbb;
-  font-size:14px;
+form {
+  float:left;
+  display:inline;
+  min-width: 300px;
+  max-width: 750px;
+  width: 90%;
+  background: #3a3b3b;
+  @include rounded(10px);
+  @include shadow(3px, 5px, 5px, #111);
+  margin-bottom: 20px;
+  padding: 15px;
+  input {
+    background:#444;
+    border:2px solid #4a4b4b;
+    @include rounded(8px);
+    padding:10px;
+    width: 80%;
+    max-width: 600px;
+    color:$yellow;
+    font-size:14px;
+  }
 }
 
 textarea {
@@ -218,12 +231,19 @@ ul.actions {
 
   li a {
     display:block;
-    background:#3a3b3b;
-    @include rounded(5px);
+    background:#4a4b4b;
+    @include rounded(10px);
+    @include vertical-gradient(#555, #4a4b4b);
     text-align:center;
+    color: $light-blue;
     padding:5px;
-    margin-bottom:10px;
-    &:hover { background:#4a4b4b; }
+    margin:10px;
+    @include shadow(3px, 5px, 5px, #333);
+    &:hover {
+      background:#4a4b4b;
+      @include vertical-gradient(#4a4b4b, #555);
+      @include shadow(3px, 5px, 5px, #111);
+    }
   }
 }
 
@@ -247,10 +267,10 @@ ul.items {
 ul.posts {
   float:left;
   display:inline;
-    min-width: 300px;
-    max-width: 800px;
-    width: 100%;
-    margin-right: -80px;
+  min-width: 300px;
+  max-width: 800px;
+  width: 100%;
+  margin-right: -80px;
   li.post {
     float:left;
     display:inline;

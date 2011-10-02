@@ -31,5 +31,7 @@
          (resp/redirect "/blog/"))
 
 (defpage "/blog/" []
-         (blog-page (posts/all-posts)))
+         (blog-page (posts/find-last 5)))
 
+(defpage "/blog/post/:id" {:keys [id]}
+         (blog-page [(posts/find-by-id id)]))

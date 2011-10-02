@@ -1,11 +1,16 @@
 (ns jawaninja.views.common
   (:use noir.core
         hiccup.core
-        hiccup.page-helpers))
+        hiccup.page-helpers)
+  (:require [jawaninja.models.user :as users]))
 
 ;; Links
 
-(def main-links [{:url "/blog/" :text "Blog"}])
+(defn welcome-user []
+  (if (users/me) [:div#welcome [:p (str "Welcome " (users/me) "!")]]))
+
+(def main-links [{:url "/blog/" :text "Blog"}
+                 {:url "/blog/login" :text "Login"}])
 
 (def admin-links [{:url "/blog/" :text "Blog"}
                   {:url "/blog/admin" :text "Posts"}
@@ -36,7 +41,7 @@
       [:div#sun2]
     [:h1 (link-to "/blog/" "Jawaninja")]
     [:ul.nav
-      (map link-item admin-links)]
+      (map link-item main-links)]
    ])
 
 (defpartial about []
@@ -72,6 +77,27 @@
      [:div#sun1]
       [:div#wrapper
         [:div.content
+          (welcome-user)
+          (header)
+          content
+          (about)
+          (social)
+        ]
+       ]
+      ]
+    ]))
+
+
+(defpartial admin-layout [& content]
+  (html5
+    (build-head [:reset :default :iphone :jquery :blog.js])
+    [:body
+      (github-banner)
+     [:div#page
+     [:div#sun1]
+      [:div#wrapper
+        [:div.content
+          (welcome-user)
           (header)
           content
           (about)

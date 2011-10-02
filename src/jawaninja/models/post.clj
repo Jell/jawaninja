@@ -6,6 +6,35 @@
   (:use [jawaninja.database])
   )
 
+
+;; instance methods
+
+(defn url [{:keys [id]}]
+  (str "/blog/post/" id))
+
+;; Getters
+(defn all
+  "Return all the rows of the posts table as a vector"
+  []
+  (sql/with-connection db
+    (sql/with-query-results res
+      ["SELECT * FROM posts"]
+      (into [] res))))
+
+(defn find-by-id
+  "Return all the rows of the users table as a vector"
+  [id]
+  (sql/with-connection db
+    (sql/with-query-results res
+      ["SELECT * FROM posts WHERE id=?", id]
+      (first (into [] res)))))
+
+(defn find-last [count]
+  (sql/with-connection db
+    (sql/with-query-results res
+      ["SELECT * FROM posts ORDER BY created_at DESC LIMIT ?" count]
+      (into [] res))))
+
 (defn create-post [title body]
   (sql/insert-values
     :posts
@@ -41,18 +70,10 @@
 
 "))
 
-(defn all-posts
-  "Return all the rows of the posts table as a vector"
-  []
-  (sql/with-connection db
-    (sql/with-query-results res
-      ["SELECT * FROM posts"]
-      (into [] res))))
-
 (defn init! []
   (sql/with-connection db
     (drop-posts)
     (create-posts)
     (create-default-post)
-    (all-posts)))
+    (all)))
 
