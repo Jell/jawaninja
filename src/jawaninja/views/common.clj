@@ -14,6 +14,7 @@
 
 (def includes {:jquery (include-js "http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js")
                :default (include-css "/css/default.css")
+               :handheld [:link {:type "text/css" :href "/css/handheld.css" :media "handheld" :rel "stylesheet"}]
                :reset (include-css "/css/reset.css")
                :blog.js (include-js "/js/blog.js")})
 
@@ -64,7 +65,7 @@
 
 (defpartial main-layout [& content]
   (html5
-    (build-head [:reset :default :jquery :blog.js])
+    (build-head [:reset :default :handheld :jquery :blog.js])
     [:body
       (github-banner)
      [:div#page
