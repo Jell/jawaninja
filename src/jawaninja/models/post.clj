@@ -79,7 +79,7 @@
                          [:moniker :title :body :created_at :updated_at]
                          [(gen-moniker title) title body nil nil])))
 
-(defn add! [{:keys [title body] :as post}]
+(defn add! [post]
   (if (valid-create? post) (create! post)))
 
 (defn- create-posts-table!

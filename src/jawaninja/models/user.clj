@@ -38,23 +38,42 @@
   (session/get :username))
 
 ;; creaters
-
-(defn valid? [{:keys [username password]}]
-  (vali/rule (not (find-by-username username))
-             [:username "That username is already taken"])
+(defn valid-edit? [{:keys [username password]}]
   (vali/rule (vali/min-length? username 3)
              [:username "username must be at least 3 characters."])
   (vali/rule (vali/min-length? password 5)
              [:password "Password must be at least 5 characters."])
   (not (vali/errors? :username :password)))
 
-(defn create-user [{:keys [id username password created_at updated_at] :as user}]
-  (sql/insert-values
-    :users
-    [:id :username :password :created_at :updated_at]
-    [id username (crypt/encrypt password) created_at updated_at]))
+(defn valid-create? [{:keys [username password] :as user}]
+  (valid-edit? user)
+  (vali/rule (not (find-by-username username))
+             [:username "That username is already taken"])
+  (not (vali/errors? :username :password)))
 
-(defn- create-users
+(defn create! [{:keys [id username password created_at updated_at] :as user}]
+  (sql/with-connection db
+                       (sql/insert-values
+                         :users
+                         [:id :username :password :created_at :updated_at]
+                         [id username (crypt/encrypt password) created_at updated_at])))
+
+(defn add! [user]
+  (if (valid-create? user) (create! user)))
+
+(defn edit! [{:keys [id username password] :as user}]
+  (when (valid-edit? user)
+    (sql/with-connection db
+                         (sql/update-values
+                           :users
+                           ["id = ?" id]
+                           {:username username :password (crypt/encrypt password)}))))
+
+(defn remove! [{:keys [id] :as user}]
+  (sql/with-connection db
+                       (sql/delete-rows :users ["id = ?" id])))
+
+(defn- create-users-table!
   "Create the users table"
   []
   (sql/create-table
@@ -67,15 +86,15 @@
   (sql/do-commands "CREATE UNIQUE INDEX user_id_index ON users (id) USING BTREE;")
   (sql/do-commands "CREATE UNIQUE INDEX user_username_index ON users (username) USING BTREE;"))
 
-(defn- drop-users
+(defn- drop-users-table!
   "Drop the users table"
   []
   (try
     (sql/drop-table :users)
     (catch Exception _)))
 
-(defn- create-default-user []
-  (create-user {:username "admin" :password "admin"}))
+(defn- create-default-user! []
+  (create! {:username "admin" :password "admin"}))
 
 (defn login! [{:keys [username password] :as user}]
   (let [{stored-pass :password} (find-by-username username)]
@@ -88,8 +107,8 @@
 
 (defn init! []
   (sql/with-connection db
-    (drop-users)
-    (create-users)
-    (create-default-user)
+    (drop-users-table!)
+    (create-users-table!)
+    (create-default-user!)
     (all)))
 

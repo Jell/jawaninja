@@ -40,9 +40,9 @@
             [:li
              (link-to url text)])
 
-(defpartial user-item [{:keys [username]}]
+(defpartial user-item [{:keys [id username]}]
             [:li
-             (link-to (str "/blog/admin/user/edit/" username) username)])
+             (link-to (str "/blog/admin/user/edit/" id) username)])
 
 ;; Admin pages
 
@@ -112,3 +112,45 @@
 (defpage "/blog/admin/post/remove/:id" {:keys [id] :as post}
          (posts/remove! post)
          (resp/redirect "/blog/admin"))
+
+
+;; Users admin
+
+(defpage "/blog/admin/users" {}
+         (common/admin-layout
+           [:div.items
+           [:ul.actions
+            (map action-item user-actions)]
+           [:ul.items
+            (map user-item (users/all))]]))
+
+(defpage "/blog/admin/user/add" {}
+         (common/admin-layout
+           [:ul.actions
+            [:li (link-to {:class "submit"} "/" "Add")]]
+           (form-to [:post "/blog/admin/user/add"]
+                    (user-fields {})
+                    (submit-button {:class "submit"} "add user"))))
+
+(defpage [:post "/blog/admin/user/add"] {:keys [username password] :as user}
+         (if (users/add! user)
+           (resp/redirect "/blog/admin/users")
+           (render "/blog/admin/user/add" user)))
+
+(defpage "/blog/admin/user/edit/:id" {:keys [id]}
+         (let [user (users/find-by-id id)]
+           (common/admin-layout
+             [:ul.actions
+              [:li (link-to {:class "submit"} "/" "Submit")]
+              [:li (link-to {:class "delete"} (str "/blog/admin/user/remove/" id) "Remove")]]
+             (form-to [:post (str "/blog/admin/user/edit/" id)]
+                      (user-fields user)))))
+
+(defpage [:post "/blog/admin/user/edit/:id"] {:keys [id] :as user}
+         (if (users/edit! user)
+           (resp/redirect "/blog/admin/users")
+           (render "/blog/admin/user/edit/:id" user)))
+
+(defpage "/blog/admin/user/remove/:id" {:keys [id] :as user}
+         (users/remove! user)
+         (resp/redirect "/blog/admin/users"))
