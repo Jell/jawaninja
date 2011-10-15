@@ -1,7 +1,8 @@
 @mixin vertical-gradient($start-color, $end-color) {
+  background: $end-color;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$start-color}', endColorstr='#{$end-color}'); /* for IE */
-  background: -webkit-gradient(linear, left top, left bottom, from($start-color), to($end-color)); /* for webkit browsers */
   background: -moz-linear-gradient(top,  $start-color, $end-color); /* for firefox 3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, from($start-color), to($end-color)); /* for webkit browsers */
 }
 
 @mixin rounded($radius){
