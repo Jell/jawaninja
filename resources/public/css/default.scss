@@ -313,12 +313,18 @@ ul.posts {
       display:inline;
       width:70%;
       margin-bottom:10px;
+      a {
+        color: $light-blue;
+      }
     }
     .datetime {
       float:right;
       display:inline;
       font-size:11px;
       color:#8a8b8b;
+      li a {
+        @include button();
+      }
     }
     .content {
       float:left;
