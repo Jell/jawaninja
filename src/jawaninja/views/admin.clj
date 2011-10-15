@@ -118,9 +118,9 @@
 
 (defpage "/blog/admin/users" {}
          (common/admin-layout
-           [:div.items
            [:ul.actions
             (map action-item user-actions)]
+           [:div.items
            [:ul.items
             (map user-item (users/all))]]))
 
