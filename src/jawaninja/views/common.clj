@@ -41,7 +41,7 @@
       [:div#sun2]
     [:h1 (link-to "/blog/" "Jawaninja")]
     [:ul.nav
-      (map link-item main-links)]
+      (map link-item (if (users/admin?) admin-links main-links))]
    ])
 
 (defpartial about []
@@ -72,18 +72,19 @@
   (html5
     (build-head [:reset :default :iphone :jquery :blog.js])
     [:body
-      (github-banner)
-     [:div#page
-     [:div#sun1]
-      [:div#wrapper
-        [:div.content
-          (welcome-user)
-          (header)
-          content
-          (about)
-          (social)
+     [:div#body-wrapper
+       (github-banner)
+       [:div#page
+       [:div#sun1]
+        [:div#wrapper
+          [:div.content
+            (header)
+            content
+            (about)
+            (social)
+          ]
+         ]
         ]
-       ]
       ]
     ]))
 
@@ -92,17 +93,18 @@
   (html5
     (build-head [:reset :default :iphone :jquery :blog.js])
     [:body
-      (github-banner)
-     [:div#page
-     [:div#sun1]
-      [:div#wrapper
-        [:div.content
-          (welcome-user)
-          (header)
-          content
-          (about)
-          (social)
+     [:div#body-wrapper
+       (github-banner)
+       [:div#page
+       [:div#sun1]
+        [:div#wrapper
+          [:div.content
+            (header)
+            content
+            (about)
+            (social)
+          ]
+         ]
         ]
-       ]
       ]
     ]))

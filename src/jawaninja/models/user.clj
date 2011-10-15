@@ -63,7 +63,9 @@
     [:username "varchar(32)" "UNIQUE" "NOT NULL"]
     [:password "varchar(255)" "NOT NULL"]
     [:created_at "TIMESTAMP" "DEFAULT '0000-00-00 00:00:00'"]
-    [:updated_at "TIMESTAMP" "DEFAULT CURRENT_TIMESTAMP on update NOW()"]))
+    [:updated_at "TIMESTAMP" "DEFAULT CURRENT_TIMESTAMP on update NOW()"])
+  (sql/do-commands "CREATE UNIQUE INDEX user_id_index ON users (id) USING BTREE;")
+  (sql/do-commands "CREATE UNIQUE INDEX user_username_index ON users (username) USING BTREE;"))
 
 (defn- drop-users
   "Drop the users table"

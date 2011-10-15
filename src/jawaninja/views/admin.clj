@@ -55,9 +55,9 @@
          (if (users/admin?)
            (resp/redirect "/blog/admin")
            (common/main-layout
+             [:ul.actions
+              [:li (link-to {:class "submit"} "/" "Login")]]
              (form-to [:post "/blog/login"]
-                      [:ul.actions
-                       [:li (link-to {:class "submit"} "/" "Login")]]
                       (user-fields user)
                       (submit-button {:class "submit"} "submit")))))
 
@@ -74,5 +74,41 @@
          (common/admin-layout
            [:ul.actions
             (map action-item post-actions)]
-           [:ul.items
-            (map post-item (posts/find-last 5))]))
+           [:div.items
+            [:ul.items
+            (map post-item (posts/find-last 5))]]))
+
+
+;; Posts admin
+
+(defpage "/blog/admin/post/add" {:as post}
+         (common/admin-layout
+           [:ul.actions
+            [:li (link-to {:class "submit"} "/" "Add")]]
+           (form-to [:post "/blog/admin/post/add"]
+                    (post-fields post)
+                    (submit-button {:class "submit"} "add post"))))
+
+(defpage [:post "/blog/admin/post/add"] {:as post}
+           (if (posts/add! post)
+             (resp/redirect "/blog/admin")
+             (render "/blog/admin/post/add" post)))
+
+(defpage "/blog/admin/post/edit/:id" {:keys [id]}
+         (if-let [post (posts/find-by-id id)]
+           (common/admin-layout
+             [:ul.actions
+              [:li (link-to {:class "submit"} "/" "Submit")]
+              [:li (link-to {:class "delete"} (str "/blog/admin/post/remove/" id) "Remove")]]
+             (form-to [:post (str "/blog/admin/post/edit/" id)]
+                      (post-fields post)
+                      (submit-button {:class "submit"} "submit")))))
+
+(defpage [:post "/blog/admin/post/edit/:id"] {:keys [id] :as post}
+         (if (posts/edit! post)
+           (resp/redirect (posts/url post))
+           (render "/blog/admin/post/edit/:id" post)))
+
+(defpage "/blog/admin/post/remove/:id" {:keys [id] :as post}
+         (posts/remove! post)
+         (resp/redirect "/blog/admin"))

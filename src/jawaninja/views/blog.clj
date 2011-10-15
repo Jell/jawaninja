@@ -14,10 +14,13 @@
 (defpartial post-item [{:keys [title body created_at] :as post}]
             (when post
               [:li.post
-               [:h2 title]
+               [:h2 (link-to (posts/url post) title)]
                [:ul.datetime
+                (when (user/admin?)
+                  [:li (link-to (posts/edit-url post) "edit")])
                 [:li (timestamp->date created_at) ]
-                [:li (timestamp->time created_at) ]]
+                [:li (timestamp->time created_at) ]
+               ]
                [:div.content (md->html body)]]))
 
 (defpartial blog-page [items]
@@ -33,5 +36,10 @@
 (defpage "/blog/" []
          (blog-page (posts/find-last 5)))
 
-(defpage "/blog/post/:id" {:keys [id]}
-         (blog-page [(posts/find-by-id id)]))
+
+;; Post pages
+
+(defpage "/blog/post/:moniker" {:keys [moniker]}
+         (blog-page [(posts/find-by-moniker moniker)]))
+
+
