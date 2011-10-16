@@ -160,7 +160,7 @@ h3 {
 ul { list-style:none; }
 
 a {
-  color: $titles-color;
+  color: $light-blue;
   text-decoration:none;
 }
 
@@ -243,6 +243,10 @@ input + textarea { margin-top:10px; }
   padding-left: 25%;
   margin-top: 90px;
   margin-bottom:10px;
+
+  a {
+    color: $titles-color;
+  }
 
   img {
     float: left;
