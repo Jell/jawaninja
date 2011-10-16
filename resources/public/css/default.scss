@@ -292,6 +292,22 @@ ul.actions {
   }
 }
 
+div.fb-like {
+  display: block;
+  width: 50px;
+  margin-left: 20px;
+  float: right;
+}
+
+div.fb-comments {
+  width: 100%;
+  padding: 0px;
+  span iframe {
+  margin-top: 20px;
+    width: 100% !important;
+  }
+}
+
 div.items {
   @include main-big-box();
   ul.items {
@@ -307,6 +323,7 @@ div.items {
 ul.posts {
   @include main-big-box();
   li.post {
+    display: block;
     @include main-inner-box();
     h2 {
       float:left;

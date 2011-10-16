@@ -11,17 +11,27 @@
 
 ;; Page structure
 
-(defpartial post-item [{:keys [title body created_at] :as post}]
+(defpartial post-item [{:keys [moniker title body created_at] :as post}]
             (when post
               [:li.post
                [:h2 (link-to (posts/url post) title)]
+               [:div.fb-like  {:data-send "true"
+                               :data-href (str "jawaninja.com" (posts/url post))
+                               :data-layout "box_count"
+                               :data-width "50"
+                               :data-show-faces "true"
+                               :data-colorscheme="dark"}]
                [:ul.datetime
                 (when (user/admin?)
                   [:li (link-to (posts/edit-url post) "edit")])
                 [:li (timestamp->date created_at) ]
-                [:li (timestamp->time created_at) ]
-               ]
-               [:div.content (md->html body)]]))
+                [:li (timestamp->time created_at) ]]
+               [:div.content (md->html body)]
+               [:div.fb-comments {:data-href (str "jawaninja.com" (posts/url post))
+                                  :data-num-posts "2"
+                                  :data-width "500"
+                                  :data-colorscheme "dark"}]
+               ]))
 
 (defpartial blog-page [items]
             (common/main-layout

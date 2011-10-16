@@ -72,6 +72,14 @@
   (html5
     (build-head [:reset :default :iphone :jquery :blog.js])
     [:body
+           [:div#fb-root]
+           [:script "(function(d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) {return;}
+                    js = d.createElement(s); js.id = id;
+                    js.src = '//connect.facebook.net/en_GB/all.js#xfbml=1';
+                    fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'))"]
      [:div#body-wrapper
        (github-banner)
        [:div#page
