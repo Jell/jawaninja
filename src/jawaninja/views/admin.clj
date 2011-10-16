@@ -70,6 +70,8 @@
          (session/clear!)
          (resp/redirect "/blog/"))
 
+;; Posts admin
+
 (defpage "/blog/admin" {}
          (common/admin-layout
            [:ul.actions
@@ -77,9 +79,6 @@
            [:div.items
             [:ul.items
             (map post-item (posts/find-last 5))]]))
-
-
-;; Posts admin
 
 (defpage "/blog/admin/post/add" {:as post}
          (common/admin-layout
