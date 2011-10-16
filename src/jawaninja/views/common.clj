@@ -66,53 +66,34 @@
       [:img {:src "/img/linkedin.png" :alt "linkedin" :width "32px" :height "32px"}]]
       ])
 
+(defpartial facebook-script []
+            [:div#fb-root]
+            [:script "(function(d, s, id) {
+                     var js, fjs = d.getElementsByTagName(s)[0];
+                     if (d.getElementById(id)) {return;}
+                     js = d.createElement(s); js.id = id;
+                     js.src = '//connect.facebook.net/en_GB/all.js#xfbml=1';
+                     fjs.parentNode.insertBefore(js, fjs);
+                     }(document, 'script', 'facebook-jssdk'))"])
+
+(defpartial main-content [& content]
+            [:div#page
+             [:div#sun1]
+             [:div#wrapper
+              [:div.content content]]])
+
+(defpartial build-body [& content]
+            [:body
+             (when (re-find #"fb-comments|fb-like" (str content))
+               (facebook-script))
+              [:div#body-wrapper (github-banner) content]])
+
 ;; Layouts
 
 (defpartial main-layout [& content]
-  (html5
-    (build-head [:reset :default :iphone :jquery :blog.js])
-    [:body
-           [:div#fb-root]
-           [:script "(function(d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) {return;}
-                    js = d.createElement(s); js.id = id;
-                    js.src = '//connect.facebook.net/en_GB/all.js#xfbml=1';
-                    fjs.parentNode.insertBefore(js, fjs);
-                    }(document, 'script', 'facebook-jssdk'))"]
-     [:div#body-wrapper
-       (github-banner)
-       [:div#page
-       [:div#sun1]
-        [:div#wrapper
-          [:div.content
-            (header)
-            content
-            (about)
-            (social)
-          ]
-         ]
-        ]
-      ]
-    ]))
-
-
-(defpartial admin-layout [& content]
-  (html5
-    (build-head [:reset :default :iphone :jquery :blog.js])
-    [:body
-     [:div#body-wrapper
-       (github-banner)
-       [:div#page
-       [:div#sun1]
-        [:div#wrapper
-          [:div.content
-            (header)
-            content
-            (about)
-            (social)
-          ]
-         ]
-        ]
-      ]
-    ]))
+            (html5
+              (build-head [:reset :default :iphone :jquery :blog.js])
+              (build-body (main-content (header)
+                                        content
+                                        (about)
+                                        (social)))))

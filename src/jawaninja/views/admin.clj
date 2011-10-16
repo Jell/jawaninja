@@ -73,7 +73,7 @@
 ;; Posts admin
 
 (defpage "/blog/admin" {}
-         (common/admin-layout
+         (common/main-layout
            [:ul.actions
             (map action-item post-actions)]
            [:div.items
@@ -81,7 +81,7 @@
             (map post-item (posts/find-last 5))]]))
 
 (defpage "/blog/admin/post/add" {:as post}
-         (common/admin-layout
+         (common/main-layout
            [:ul.actions
             [:li (link-to {:class "submit"} "/" "Add")]]
            (form-to [:post "/blog/admin/post/add"]
@@ -95,7 +95,7 @@
 
 (defpage "/blog/admin/post/edit/:id" {:keys [id]}
          (if-let [post (posts/find-by-id id)]
-           (common/admin-layout
+           (common/main-layout
              [:ul.actions
               [:li (link-to {:class "submit"} "/" "Submit")]
               [:li (link-to {:class "delete"} (str "/blog/admin/post/remove/" id) "Remove")]]
@@ -116,7 +116,7 @@
 ;; Users admin
 
 (defpage "/blog/admin/users" {}
-         (common/admin-layout
+         (common/main-layout
            [:ul.actions
             (map action-item user-actions)]
            [:div.items
@@ -124,7 +124,7 @@
             (map user-item (users/all))]]))
 
 (defpage "/blog/admin/user/add" {}
-         (common/admin-layout
+         (common/main-layout
            [:ul.actions
             [:li (link-to {:class "submit"} "/" "Add")]]
            (form-to [:post "/blog/admin/user/add"]
@@ -138,7 +138,7 @@
 
 (defpage "/blog/admin/user/edit/:id" {:keys [id]}
          (let [user (users/find-by-id id)]
-           (common/admin-layout
+           (common/main-layout
              [:ul.actions
               [:li (link-to {:class "submit"} "/" "Submit")]
               [:li (link-to {:class "delete"} (str "/blog/admin/user/remove/" id) "Remove")]]
