@@ -31,30 +31,52 @@
              [:li (timestamp->date created_at) ]
              [:li (timestamp->time created_at) ]])
 
-(defpartial post-item [{:keys [moniker title body created_at] :as post}]
+(defpartial post-item [{:keys [moniker title body created_at] :as post} & opts]
             (when post
               [:li.post
                [:h2 (link-to (posts/url post) title)]
                (facebook-like post)
                (date-and-actions post)
                [:div.content (md->html body)]
-               (facebook-comments post)
+               (if (some #{:with-comments} opts)
+                 (facebook-comments post))
                ]))
 
-(defpartial blog-page [items]
-            (common/main-layout
-              [:ul.posts
-               (map post-item items)]))
+(defpartial page-link [page url]
+            [:li
+             [:a.button {:href url} page]])
 
+(defpartial page-links []
+            [:ul.actions
+             (map #(apply page-link %) (posts/page-list))])
 ;; Blog pages
 
 (defpage "/" []
          (resp/redirect "/blog/"))
 
+(defpage "/blog" []
+         (resp/redirect "/blog/"))
+
 (defpage "/blog/" []
-         (blog-page (posts/find-last 5)))
+         (common/main-layout
+           [:ul.posts
+            (map post-item (posts/get-page 1))]
+           (page-links)))
+
+(defpage "/blog/page" []
+         (resp/redirect "/blog/page/1"))
+
+(defpage "/blog/page/" []
+         (resp/redirect "/blog/page/1"))
+
+(defpage "/blog/page/:page-num" {:keys [page-num]}
+         (common/main-layout
+           [:ul.posts
+            (map post-item (posts/get-page page-num))]
+           (page-links)))
 
 (defpage "/blog/post/:moniker" {:keys [moniker]}
-         (blog-page [(posts/find-by-moniker moniker)]))
-
+            (common/main-layout
+              [:ul.posts
+               (post-item (posts/find-by-moniker moniker) :with-comments)]))
 

@@ -2,10 +2,12 @@
   (:require [jawaninja.models.user :as users]
             [clojure.string :as string]
             [noir.validation :as vali]
-            [noir.session :as session])
+            [noir.session :as session]
+            [clojure.contrib.math :as math])
   (:use [jawaninja.database])
   )
 
+(def posts-per-page 5)
 (declare new-moniker? gen-moniker)
 (declare url edit-url)
 (declare all find-by-id find-by-moniker find-last create! add! remove! edit!)
@@ -34,7 +36,23 @@
 ;; Queries
 
 (defn all []
-  (db-query ["SELECT * FROM posts"]))
+  (db-query ["SELECT * FROM posts ORDER BY created_at"]))
+
+(defn total []
+  (:count (first (db-query ["SELECT COUNT(*) as count FROM posts"]))))
+
+(defn total-pages []
+  (math/ceil (/ (total) posts-per-page)))
+
+(defn page-list []
+  (map #(vector (str "Page " %)
+                (str "/blog/page/" %))
+       (range 1 (+ 1 (total-pages)))))
+
+(defn get-page [page]
+  (let [page-num (dec (Integer. page)) ;; make it 1-based indexing
+        offset (* page-num posts-per-page)]
+    (db-query ["SELECT * FROM posts ORDER BY created_at LIMIT ? OFFSET ?" posts-per-page offset])))
 
 (defn find-by-id [id]
   (first (db-query ["SELECT * FROM posts WHERE id = ?", id])))

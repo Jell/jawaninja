@@ -51,18 +51,18 @@
     [:p "I'm a passionate developer that loves programming, learning stuff, playing guitar, programming and home-brewing beer."]])
 
 (defpartial github-banner []
-  [:a {:id "githubbanner" :href "https://github.com/Jell"}
+  [:a {:id "githubbanner" :href "https://github.com/Jell" :target "_blank"}
     [:img {:src "/img/githubbanner.png" :alt "Fork me on GitHub"}]
   ])
 
 (defpartial social []
   [:div.right-panel
     [:p [:strong "Social"]]
-    [:a {:href "http://www.facebook.com/jeanlouis.giordano"}
+    [:a {:href "http://www.facebook.com/jeanlouis.giordano" :target "_blank"}
       [:img {:src "/img/facebook.png" :alt "facebook" :width "32px" :height "32px"}]]
-    [:a {:href "http://twitter.com/#!/jellismymind"}
+    [:a {:href "http://twitter.com/#!/jellismymind" :target "_blank"}
       [:img {:src "/img/twitter.png" :alt "twitter" :width "32px" :height "32px"}]]
-    [:a {:href "http://www.linkedin.com/in/jeanlouisgiordano"}
+    [:a {:href "http://www.linkedin.com/in/jeanlouisgiordano" :target "_blank"}
       [:img {:src "/img/linkedin.png" :alt "linkedin" :width "32px" :height "32px"}]]
       ])
 
