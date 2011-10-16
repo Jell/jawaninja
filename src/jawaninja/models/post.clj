@@ -6,7 +6,33 @@
   (:use [jawaninja.database])
   )
 
-;; Getters
+(declare new-moniker? gen-moniker)
+(declare url edit-url)
+(declare all find-by-id find-by-moniker find-last create! add! remove! edit!)
+(declare valid-edit? valid-create?)
+(declare create-posts-table! drop-posts-table! create-default-post!)
+
+;; Moniker
+
+(defn new-moniker? [moniker]
+  (nil? (find-by-moniker moniker)))
+
+(defn gen-moniker [title]
+  (-> title
+    (string/lower-case)
+    (string/replace #"[^a-zA-Z0-9\s]" "")
+    (string/replace #" " "-")))
+
+;; Urls
+
+(defn url [{:keys [moniker title]}]
+  (str "/blog/post/" (if (nil? moniker) (gen-moniker title) moniker)))
+
+(defn edit-url [{:keys [id]}]
+  (str "/blog/admin/post/edit/" id))
+
+;; Queries
+
 (defn all []
   (db-query ["SELECT * FROM posts"]))
 
@@ -19,22 +45,26 @@
 (defn find-last [count]
   (db-query ["SELECT * FROM posts ORDER BY created_at DESC LIMIT ?" count]))
 
-;; instance methods
+(defn create! [{:keys [title body] :as post}]
+  (db-insert!
+    :posts
+    [:moniker :title :body :created_at :updated_at]
+    [(gen-moniker title) title body nil nil]))
 
-(defn new-moniker? [moniker]
-  (nil? (find-by-moniker moniker)))
+(defn add! [post]
+  (if (valid-create? post) (create! post)))
 
-(defn gen-moniker [title]
-  (-> title
-    (string/lower-case)
-    (string/replace #"[^a-zA-Z0-9\s]" "")
-    (string/replace #" " "-")))
+(defn remove! [{:keys [id] :as post}]
+  (db-delete! :posts ["id = ?" id]))
 
-(defn url [{:keys [moniker title]}]
-  (str "/blog/post/" (if (nil? moniker) (gen-moniker title) moniker )))
+(defn edit! [{:keys [id title body] :as post}]
+  (when (valid-edit? post)
+    (db-update!
+      :posts
+      ["id = ?" id]
+      {:moniker (gen-moniker title) :title title :body body})))
 
-(defn edit-url [{:keys [id]}]
-  (str "/blog/admin/post/edit/" id))
+;; Validation
 
 (defn valid-edit? [{:keys [title body] :as post}]
   (vali/rule (vali/has-value? title)
@@ -49,18 +79,15 @@
              [:title "That title is already taken."])
   (not (vali/errors? :title :body)))
 
-;; Stateful
+;; Initialization
 
-(defn create! [{:keys [title body] :as post}]
-  (db-insert!
-    :posts
-    [:moniker :title :body :created_at :updated_at]
-    [(gen-moniker title) title body nil nil]))
+(defn init! []
+  (drop-posts-table!)
+  (create-posts-table!)
+  (create-default-post!)
+  (all))
 
-(defn add! [post]
-  (if (valid-create? post) (create! post)))
-
-(defn create-posts-table! []
+(defn- create-posts-table! []
   (db-create-table!
     :posts
     [:id "INT(11)" "NOT NULL" "PRIMARY KEY" "AUTO_INCREMENT"]
@@ -73,17 +100,7 @@
   (db-do-command! "CREATE UNIQUE INDEX post_moniker_index ON posts (moniker) USING BTREE;")
   (db-do-command! "CREATE INDEX post_created_at_index ON posts (created_at) USING BTREE;"))
 
-(defn edit! [{:keys [id title body] :as post}]
-  (when (valid-edit? post)
-    (db-update!
-      :posts
-      ["id = ?" id]
-      {:moniker (gen-moniker title) :title title :body body})))
-
-(defn remove! [{:keys [id] :as post}]
-  (db-delete! :posts ["id = ?" id]))
-
-(defn drop-posts-table! []
+(defn- drop-posts-table! []
   (db-drop-table! :posts))
 
 (defn- create-default-post! []
@@ -96,10 +113,4 @@
     end
 
 "}))
-
-(defn init! []
-  (drop-posts-table!)
-  (create-posts-table!)
-  (create-default-post!)
-  (all))
 

@@ -4,7 +4,29 @@
             [noir.session :as session])
   (:use [jawaninja.database]))
 
-;; getters
+;; Declarations
+(declare admin? me login!)
+(declare all find-by-id find-by-username create! add! remove! edit!)
+(declare valid-edit? valid-create?)
+(declare create-users-table! drop-users-table! create-default-user!)
+
+;; Session
+
+(defn admin? []
+  (session/get :admin))
+
+(defn me []
+  (session/get :username))
+
+(defn login! [{:keys [username password] :as user}]
+  (let [{stored-pass :password} (find-by-username username)]
+    (if (and stored-pass (crypt/compare password stored-pass))
+      (do
+        (session/put! :admin true)
+        (session/put! :username username))
+      (vali/set-error :username "Invalid username or password"))))
+
+;; Queries
 
 (defn all []
   (db-query ["SELECT * FROM users"]))
@@ -15,13 +37,27 @@
 (defn find-by-username [username]
   (first (db-query ["SELECT * FROM users WHERE username = ?", username])))
 
-(defn admin? []
-  (session/get :admin))
+(defn create! [{:keys [username password] :as user}]
+  (db-insert!
+    :users
+    [:username :password :created_at :updated_at]
+    [username (crypt/encrypt password) nil nil]))
 
-(defn me []
-  (session/get :username))
+(defn add! [user]
+  (if (valid-create? user) (create! user)))
 
-;; creaters
+(defn remove! [{:keys [id] :as user}]
+  (db-delete! :users ["id = ?" id]))
+
+(defn edit! [{:keys [id username password] :as user}]
+  (when (valid-edit? user)
+    (db-update!
+      :users
+      ["id = ?" id]
+      {:username username :password (crypt/encrypt password)})))
+
+;; Validation
+
 (defn valid-edit? [{:keys [username password]}]
   (vali/rule (vali/min-length? username 3)
              [:username "username must be at least 3 characters."])
@@ -35,24 +71,13 @@
              [:username "That username is already taken"])
   (not (vali/errors? :username :password)))
 
-(defn create! [{:keys [username password] :as user}]
-  (db-insert!
-    :users
-    [:username :password :created_at :updated_at]
-    [username (crypt/encrypt password) nil nil]))
+;; Initialization
 
-(defn add! [user]
-  (if (valid-create? user) (create! user)))
-
-(defn edit! [{:keys [id username password] :as user}]
-  (when (valid-edit? user)
-    (db-update!
-      :users
-      ["id = ?" id]
-      {:username username :password (crypt/encrypt password)})))
-
-(defn remove! [{:keys [id] :as user}]
-  (db-delete! :users ["id = ?" id]))
+(defn init! []
+  (drop-users-table!)
+  (create-users-table!)
+  (create-default-user!)
+  (all))
 
 (defn- create-users-table! []
   (db-create-table!
@@ -71,18 +96,4 @@
 (defn- create-default-user! []
   (create! {:username "admin" :password "admin"}))
 
-(defn login! [{:keys [username password] :as user}]
-  (let [{stored-pass :password} (find-by-username username)]
-    (if (and stored-pass 
-             (crypt/compare password stored-pass))
-      (do
-        (session/put! :admin true)
-        (session/put! :username username))
-      (vali/set-error :username "Invalid username or password"))))
-
-(defn init! []
-    (drop-users-table!)
-    (create-users-table!)
-    (create-default-user!)
-    (all))
 
