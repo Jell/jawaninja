@@ -25,10 +25,11 @@
 
 ;; Helpers
 
-(defpartial build-head [incls]
+(defpartial build-head [incls & metas]
             [:head
              [:title "Jawaninja"]
-             (map #(get includes %) incls)])
+             (map #(get includes %) incls)
+             metas])
 
 (defpartial link-item [{:keys [url cls text]}]
             [:li
@@ -97,3 +98,12 @@
                                         content
                                         (about)
                                         (social)))))
+
+(defpartial opengraph-layout [metas & content]
+            (html5
+              (build-head [:reset :default :iphone :jquery :blog.js] metas)
+              (build-body (main-content (header)
+                                        content
+                                        (about)
+                                        (social)))))
+

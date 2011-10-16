@@ -76,7 +76,17 @@
            (page-links)))
 
 (defpage "/blog/post/:moniker" {:keys [moniker]}
-            (common/main-layout
+         (let [{:keys [title] :as post} (posts/find-by-moniker moniker)]
+            (common/opengraph-layout
+              (html
+               [:meta {:property "og:title" :content title}]
+               [:meta {:property "og:type" :content "website"}]
+               [:meta {:property "og:url" :content (str "http://www.jawaninja.com/blog/post/" moniker)}]
+               [:meta {:property "og:image" :content "http://www.jawaninja.com/img/jawaninja-pixel.png"}]
+               [:meta {:property "og:site_name" :content "Jawaninja"}]
+               [:meta {:property "fb:admins" :content "565303681"}]
+
+              )
               [:ul.posts
-               (post-item (posts/find-by-moniker moniker) :with-comments)]))
+               (post-item post :with-comments)])))
 
