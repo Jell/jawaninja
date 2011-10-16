@@ -12,14 +12,14 @@
 ;; Page structure
 (defpartial facebook-like [post]
             [:div.fb-like  {:data-send "true"
-                            :data-href (str "jawaninja.com" (posts/url post))
+                            :data-href (str "www.jawaninja.com" (posts/url post))
                             :data-layout "box_count"
                             :data-width "50"
                             :data-show-faces "true"
                             :data-colorscheme="dark"}])
 
 (defpartial facebook-comments [post]
-            [:div.fb-comments {:data-href (str "jawaninja.com" (posts/url post))
+            [:div.fb-comments {:data-href (str "www.jawaninja.com" (posts/url post))
                                :data-num-posts "2"
                                :data-width "500"
                                :data-colorscheme "dark"}])
