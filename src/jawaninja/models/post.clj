@@ -36,7 +36,7 @@
 ;; Queries
 
 (defn all []
-  (db-query ["SELECT * FROM posts ORDER BY created_at"]))
+  (db-query ["SELECT * FROM posts ORDER BY created_at DESC"]))
 
 (defn total []
   (:count (first (db-query ["SELECT COUNT(*) as count FROM posts"]))))
