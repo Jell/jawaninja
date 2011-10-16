@@ -78,7 +78,7 @@
             (map action-item post-actions)]
            [:div.items
             [:ul.items
-            (map post-item (posts/find-last 5))]]))
+            (map post-item (posts/all))]]))
 
 (defpage "/blog/admin/post/add" {:as post}
          (common/main-layout
