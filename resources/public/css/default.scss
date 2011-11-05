@@ -70,10 +70,7 @@ $light-blue: #62A9F3;
 
 html {
   background: #555;
-  height: 100%;
-  background-image:url('/img/jawaninja-pixel.png');
-  background-repeat: repeat-y;
-  background-position: 10% 0px;
+  overflow: auto;
 }
 
 body {
@@ -81,6 +78,7 @@ body {
   color: #d1d9e1;
   min-width: 320px;
   height: 100%;
+  overflow: auto;
 }
 
 #body-wrapper {
@@ -91,6 +89,7 @@ body {
   @include vertical-gradient(#E6B5AE, #555);
   margin: 0px;
   padding: 0px;
+  overflow: auto;
 }
 
 #page {
@@ -102,6 +101,7 @@ body {
   width: 100%;
   height: 100%;
   margin: 0 auto 0 auto;
+  overflow: auto;
 }
 
 #sun1 {
