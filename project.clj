@@ -7,7 +7,7 @@
                            [org.clojure/java.jdbc "0.0.7"]
                            [mysql/mysql-connector-java "5.1.17"]
                            [clj-yaml "0.3.0-SNAPSHOT"]]
-            :dev-dependencies [[lein-ring "0.4.3"]]
+            :dev-dependencies [[lein-ring "0.4.6"]]
             :ring {:handler jawaninja.server/handler}
             :main jawaninja.server)
 
