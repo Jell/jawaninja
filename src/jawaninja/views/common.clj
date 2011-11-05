@@ -100,7 +100,8 @@
                                         (social)))))
 
 (defpartial opengraph-layout [metas & content]
-            (html5
+            (html5 {:xmlns:og "http://opengraphprotocol.org/schema/"
+                    :xmlns:fb "http://www.facebook.com/2008/fbml"}
               (build-head [:reset :default :iphone :jquery :blog.js] metas)
               (build-body (main-content (header)
                                         content

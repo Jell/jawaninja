@@ -10,3 +10,5 @@
     (server/start port {:mode mode
                         :ns 'jawaninja})))
 
+(def handler (server/gen-handler {:mode :dev
+                                  :ns 'jawaninja}))
