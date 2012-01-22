@@ -1,16 +1,12 @@
 # jawaninja
 
-A website written in noir.
-
-Barelly functionnal for now. Every time the server is started, the
-tables in the database are droped and seeded with default values, so
-beware.
+Codebase for my blog, written in noir. Work in progress.
 
 ## Usage
 
 ```bash
 lein deps
-lein run
+lein ring server
 ```
 
 ## License
