@@ -46,8 +46,10 @@
   (github-banner)
   [:div.page-header
    [:div.row-fluid
-    [:div.span3 [:img {:src "/img/jawaninja-pixel.png"}]]
-    [:div.span7
+    [:div.span2
+     [:img.pull-right {:src "/img/jawaninja-pixel.png"}]
+     [:p]]
+    [:div.span8
      [:h1 (link-to "/blog/" "Jawaninja")]
      [:p "Elucubrations of a Jedi wannabe"]
      [:div {:class "btn-group pull-right"}

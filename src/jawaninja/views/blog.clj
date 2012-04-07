@@ -31,29 +31,29 @@
                [:li.btn (link-to (posts/edit-url post) "edit")])])
 
 (defpartial post-item [{:keys [moniker title body created_at] :as post} & opts]
-            (when post
-              [:div {:class "row-fluid"}
-               [:div.span10
-                (date-and-actions post)
-                [:h2 (link-to (posts/url post) title)]
-                (md->html body)
-                ]
-               [:div.span2
-                (facebook-like post)
-                ]
-              (if (some #{:with-comments} opts)
-                [:div.row-fluid (facebook-comments post)])
-               ]))
+  (when post
+    [:div.row-fluid
+     [:div.span2
+      (facebook-like post)
+      [:p]]
+     [:div.span10
+      (date-and-actions post)
+      [:h2 (link-to (posts/url post) title)]
+      (md->html body)
+      (if (some #{:with-comments} opts)
+        [:div.row-fluid (facebook-comments post)])]]))
 
 (defpartial page-link [index page url]
             [:li {:class (if (= page index) "active" nil)}
              [:a {:href url} page]])
 
 (defpartial page-links [page-num]
-  [:div.pagination
-   [:ul
-    (map (fn [[page url]] (page-link page-num page url))
-         (posts/page-list))]])
+    [:div.row-fluid
+     [:div.span2 [:p]]
+     [:div {:class "pagination span8"}
+      [:ul
+       (map (fn [[page url]] (page-link page-num page url))
+            (posts/page-list))]]])
 ;; Blog pages
 
 (defpage "/" []

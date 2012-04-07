@@ -12,3 +12,12 @@
   width: 100%;
   max-width: 150px;
 }
+
+.fb-comments {
+  width: 100%;
+  padding: 0px;
+}
+.fb-comments span iframe {
+  margin-top: 20px;
+  width: 100% !important;
+}
