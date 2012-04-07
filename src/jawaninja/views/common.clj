@@ -37,6 +37,11 @@
 
 ;; Partials
 
+(defpartial github-banner []
+  [:a {:id "githubbanner" :href "https://github.com/Jell" :target "_blank"}
+    [:img {:src "/img/githubbanner.png" :alt "Fork me on GitHub"}]
+  ])
+
 (defpartial header []
   (github-banner)
   [:div.page-header
@@ -56,11 +61,6 @@
     [:img {:id "about-img" :src "/img/profile.jpg" :alt "profile picture"}]
     [:h4 "About me"]
     [:p "I'm a passionate developer that loves programming, learning stuff, playing guitar, programming and home-brewing beer."])
-
-(defpartial github-banner []
-  [:a {:id "githubbanner" :href "https://github.com/Jell" :target "_blank"}
-    [:img {:src "/img/githubbanner.png" :alt "Fork me on GitHub"}]
-  ])
 
 (defpartial social []
     [:h4 "Social"]
