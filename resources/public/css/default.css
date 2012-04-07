@@ -1,0 +1,14 @@
+#githubbanner {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
+.fb-like {
+  float: right;
+}
+
+#about-img {
+  width: 100%;
+  max-width: 150px;
+}

@@ -5,4 +5,3 @@ pom.xml
 .lein-deps-sum
 /config/database.yml
 .sass-cache
-/resources/public/css/*.css
