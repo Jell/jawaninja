@@ -13,13 +13,13 @@
 
 ;; Links
 
-(def post-actions [{:url "/blog/admin/post/add" :text "Add a post"}])
-(def user-actions [{:url "/blog/admin/user/add" :text "Add a user"}])
+(def post-actions [{:url "/blog/admin/post/add" :text "Add a post" :class "btn btn-success"}])
+(def user-actions [{:url "/blog/admin/user/add" :text "Add a user" :class "btn btn-success"}])
 
 ;; Partials
 
 (defpartial error-text [errors]
-            [:p (string/join "<br/>" errors)])
+            [:p {:class "alert alert-error"} (string/join "<br/>" errors)])
 
 (defpartial post-fields [{:keys [title body]}]
             (vali/on-error :title error-text)
@@ -28,21 +28,19 @@
             (text-area {:placeholder "Body"} :body body))
 
 (defpartial user-fields [{:keys [username] :as usr}]
-            (vali/on-error :username error-text)
             (text-field {:placeholder "Username"} :username username)
-            (password-field {:placeholder "Password"} :password))
+            (vali/on-error :username error-text)
+            (password-field {:placeholder "Password"} :password)
+            (vali/on-error :password error-text))
 
 (defpartial post-item [{:keys [title] :as post}]
-            [:li
-             (link-to (posts/url post) title)])
+             (link-to (posts/url post) title))
 
-(defpartial action-item [{:keys [url text]}]
-            [:li
-             (link-to url text)])
+(defpartial action-item [{:keys [url text class]}]
+             (link-to {:class class} url text))
 
 (defpartial user-item [{:keys [id username]}]
-            [:li
-             (link-to (str "/blog/admin/user/edit/" id) username)])
+             (link-to (str "/blog/admin/user/edit/" id) username))
 
 ;; Admin pages
 
@@ -52,14 +50,13 @@
              (resp/redirect "/blog/login")))
 
 (defpage "/blog/login" {:as user}
-         (if (users/admin?)
-           (resp/redirect "/blog/admin")
-           (common/main-layout
-             [:ul.actions
-              [:li (link-to {:class "submit"} "/" "Login")]]
-             (form-to [:post "/blog/login"]
-                      (user-fields user)
-                      (submit-button {:class "submit"} "submit")))))
+  (if (users/admin?)
+    (resp/redirect "/blog/admin")
+    (common/main-layout nil
+                        [(form-to [:post "/blog/login"]
+                                  (user-fields user)
+                                  (submit-button {:class "btn btn-success"} "Login"))]
+                        [])))
 
 (defpage [:post "/blog/login"] {:as user}
          (if (users/login! user)
@@ -73,35 +70,30 @@
 ;; Posts admin
 
 (defpage "/blog/admin" {}
-         (common/main-layout
-           [:ul.actions
-            (map action-item post-actions)]
-           [:div.items
-            [:ul.items
-            (map post-item (posts/all))]]))
+         (common/main-layout nil
+                             (map post-item (posts/all))
+                             (map action-item post-actions)))
 
 (defpage "/blog/admin/post/add" {:as post}
-         (common/main-layout
-           [:ul.actions
-            [:li (link-to {:class "submit"} "/" "Add")]]
-           (form-to [:post "/blog/admin/post/add"]
-                    (post-fields post)
-                    (submit-button {:class "submit"} "add post"))))
+  (common/main-layout nil
+                      [(form-to [:post "/blog/admin/post/add"]
+                                (post-fields post)
+                                (submit-button {:class "btn btn-success"} "Add"))]
+                      []))
 
 (defpage [:post "/blog/admin/post/add"] {:as post}
-           (if (posts/add! post)
-             (resp/redirect "/blog/admin")
-             (render "/blog/admin/post/add" post)))
+  (if (posts/add! post)
+    (resp/redirect "/blog/admin")
+    (render "/blog/admin/post/add" post)))
 
 (defpage "/blog/admin/post/edit/:id" {:keys [id]}
-         (if-let [post (posts/find-by-id id)]
-           (common/main-layout
-             [:ul.actions
-              [:li (link-to {:class "submit"} "/" "Submit")]
-              [:li (link-to {:class "delete"} (str "/blog/admin/post/remove/" id) "Remove")]]
-             (form-to [:post (str "/blog/admin/post/edit/" id)]
-                      (post-fields post)
-                      (submit-button {:class "submit"} "submit")))))
+  (if-let [post (posts/find-by-id id)]
+    (common/main-layout nil
+                        [(form-to [:post (str "/blog/admin/post/edit/" id)]
+                                  (post-fields post)
+                                  (submit-button {:class "btn btn-success"} "Submit")
+                                  (link-to {:class "btn btn-danger"} (str "/blog/admin/post/remove/" id) "Remove"))]
+                        [])))
 
 (defpage [:post "/blog/admin/post/edit/:id"] {:keys [id] :as post}
          (if (posts/edit! post)
@@ -112,24 +104,19 @@
          (posts/remove! post)
          (resp/redirect "/blog/admin"))
 
-
 ;; Users admin
 
 (defpage "/blog/admin/users" {}
-         (common/main-layout
-           [:ul.actions
-            (map action-item user-actions)]
-           [:div.items
-           [:ul.items
-            (map user-item (users/all))]]))
+  (common/main-layout nil
+                      (map user-item (users/all))
+                      (map action-item user-actions)))
 
 (defpage "/blog/admin/user/add" {}
-         (common/main-layout
-           [:ul.actions
-            [:li (link-to {:class "submit"} "/" "Add")]]
-           (form-to [:post "/blog/admin/user/add"]
-                    (user-fields {})
-                    (submit-button {:class "submit"} "add user"))))
+  (common/main-layout nil
+                      [(form-to [:post "/blog/admin/user/add"]
+                                (user-fields {})
+                                (submit-button {:class "btn btn-success"} "Add"))]
+                      []))
 
 (defpage [:post "/blog/admin/user/add"] {:keys [username password] :as user}
          (if (users/add! user)
@@ -137,13 +124,13 @@
            (render "/blog/admin/user/add" user)))
 
 (defpage "/blog/admin/user/edit/:id" {:keys [id]}
-         (let [user (users/find-by-id id)]
-           (common/main-layout
-             [:ul.actions
-              [:li (link-to {:class "submit"} "/" "Submit")]
-              [:li (link-to {:class "delete"} (str "/blog/admin/user/remove/" id) "Remove")]]
-             (form-to [:post (str "/blog/admin/user/edit/" id)]
-                      (user-fields user)))))
+  (let [user (users/find-by-id id)]
+    (common/main-layout nil
+                        [(form-to [:post (str "/blog/admin/user/edit/" id)]
+                                  (user-fields user)
+                                  (submit-button {:class "btn btn-success"} "Submit")
+                                  (link-to {:class "btn btn-danger"} (str "/blog/admin/user/remove/" id) "Remove"))]
+                        [])))
 
 (defpage [:post "/blog/admin/user/edit/:id"] {:keys [id] :as user}
          (if (users/edit! user)

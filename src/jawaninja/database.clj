@@ -28,7 +28,6 @@
                          (sql/drop-table table)
                          (catch Exception _))))
 
-
 (defn db-do-command! [& params]
   (sql/with-connection db
                        (apply sql/do-commands params)))
@@ -45,4 +44,3 @@
 (defn all-tables []
   (map (keyword (str "tables_in_" (:database db-config)))
        (db-query ["SHOW TABLES"])))
-

@@ -45,8 +45,7 @@
   (math/ceil (/ (total) posts-per-page)))
 
 (defn page-list []
-  (map #(vector (str "Page " %)
-                (str "/blog/page/" %))
+  (map #(vector (str %) (str "/blog/page/" %))
        (range 1 (+ 1 (total-pages)))))
 
 (defn get-page [page]
@@ -131,4 +130,3 @@
     end
 
 "}))
-

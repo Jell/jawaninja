@@ -22,33 +22,38 @@
             [:div.fb-comments {:data-href (str "www.jawaninja.com" (posts/url post))
                                :data-num-posts "2"
                                :data-width "500"
-                               :data-colorscheme "dark"}])
+                               :data-colorscheme "light"}])
 
 (defpartial date-and-actions [{:keys [created_at] :as post}]
-            [:ul.datetime
+            [:ul {:class "unstyled pull-right"}
+             [:li.label (timestamp->date created_at) ]
              (when (user/admin?)
-               [:li (link-to (posts/edit-url post) "edit")])
-             [:li (timestamp->date created_at) ]
-             [:li (timestamp->time created_at) ]])
+               [:li.btn (link-to (posts/edit-url post) "edit")])])
 
 (defpartial post-item [{:keys [moniker title body created_at] :as post} & opts]
             (when post
-              [:li.post
-               [:h2 (link-to (posts/url post) title)]
-               (facebook-like post)
-               (date-and-actions post)
-               [:div.content (md->html body)]
-               (if (some #{:with-comments} opts)
-                 (facebook-comments post))
+              [:div {:class "row-fluid"}
+               [:div.span10
+                (date-and-actions post)
+                [:h2 (link-to (posts/url post) title)]
+                (md->html body)
+                ]
+               [:div.span2
+                (facebook-like post)
+                ]
+              (if (some #{:with-comments} opts)
+                [:div.row-fluid (facebook-comments post)])
                ]))
 
-(defpartial page-link [page url]
-            [:li
-             [:a.button {:href url} page]])
+(defpartial page-link [index page url]
+            [:li {:class (if (= page index) "active" nil)}
+             [:a {:href url} page]])
 
-(defpartial page-links []
-            [:ul.actions
-             (map #(apply page-link %) (posts/page-list))])
+(defpartial page-links [page-num]
+  [:div.pagination
+   [:ul
+    (map (fn [[page url]] (page-link page-num page url))
+         (posts/page-list))]])
 ;; Blog pages
 
 (defpage "/" []
@@ -58,35 +63,27 @@
          (resp/redirect "/blog/"))
 
 (defpage "/blog/" []
-         (common/main-layout
-           [:ul.posts
-            (map post-item (posts/get-page 1))]
-           (page-links)))
+  (render "/blog/page/:page-num" {:page-num "1"}))
 
 (defpage "/blog/page" []
          (resp/redirect "/blog/page/1"))
 
-(defpage "/blog/page/" []
-         (resp/redirect "/blog/page/1"))
-
 (defpage "/blog/page/:page-num" {:keys [page-num]}
-         (common/main-layout
-           [:ul.posts
-            (map post-item (posts/get-page page-num))]
-           (page-links)))
+         (common/main-layout nil
+                             [(map post-item (posts/get-page page-num))
+                              (page-links page-num)]
+                             []))
 
 (defpage "/blog/post/:moniker" {:keys [moniker]}
          (let [{:keys [title] :as post} (posts/find-by-moniker moniker)]
-            (common/opengraph-layout
-              (html
+            (common/main-layout
+              '(
                [:meta {:property "og:title" :content title}]
                [:meta {:property "og:type" :content "website"}]
                [:meta {:property "og:url" :content (str "http://www.jawaninja.com/blog/post/" moniker)}]
                [:meta {:property "og:image" :content "http://www.jawaninja.com/img/jawaninja-pixel.png"}]
                [:meta {:property "og:site_name" :content "Jawaninja"}]
                [:meta {:property "fb:admins" :content "565303681"}]
-
               )
-              [:ul.posts
-               (post-item post :with-comments)])))
-
+              [(post-item post :with-comments)]
+              [])))
