@@ -1,5 +1,5 @@
-[![Build Status](https://secure.travis-ci.org/Jell/jawaninja.png)](http://travis-ci.org/Jell/jawaninja)
 # jawaninja
+[![Build Status](https://secure.travis-ci.org/Jell/jawaninja.png)](http://travis-ci.org/Jell/jawaninja)
 
 Codebase for my blog, written in noir. Work in progress.
 
