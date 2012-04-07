@@ -21,3 +21,12 @@
   margin-top: 20px;
   width: 100% !important;
 }
+
+input.large {
+  width: 95%;
+}
+
+textarea.large {
+  width: 95%;
+  height: 400px;
+}

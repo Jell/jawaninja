@@ -23,15 +23,17 @@
 
 (defpartial post-fields [{:keys [title body]}]
             (vali/on-error :title error-text)
-            (text-field {:placeholder "Title"} :title title)
+            (text-field {:placeholder "Title" :class "large"} :title title)
             (vali/on-error :body error-text)
-            (text-area {:placeholder "Body"} :body body))
+            (text-area {:placeholder "Body" :class "large"} :body body))
 
 (defpartial user-fields [{:keys [username] :as usr}]
             (text-field {:placeholder "Username"} :username username)
             (vali/on-error :username error-text)
+            [:br]
             (password-field {:placeholder "Password"} :password)
-            (vali/on-error :password error-text))
+            (vali/on-error :password error-text)
+            [:br])
 
 (defpartial post-item [{:keys [title] :as post}]
              (link-to (posts/url post) title))
