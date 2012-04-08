@@ -101,7 +101,7 @@
 
 ;; Layouts
 
-(defpartial main-layout [head main side]
+(defpartial main-layout [{:keys [head main side]}]
             (html5 {:xmlns:og "http://opengraphprotocol.org/schema/"
                     :xmlns:fb "http://www.facebook.com/2008/fbml"}
               (build-head [:bootstrap.css :bootstrap.js :default :iphone :jquery :blog.js] head)

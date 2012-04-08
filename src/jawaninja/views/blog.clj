@@ -54,6 +54,15 @@
       [:ul
        (map (fn [[page url]] (page-link page-num page url))
             (posts/page-list))]]])
+
+(defpartial facebook-meta [title moniker]
+  [:meta {:property "og:title"     :content title}]
+  [:meta {:property "og:type"      :content "website"}]
+  [:meta {:property "og:url"       :content (str "http://www.jawaninja.com/blog/post/" moniker)}]
+  [:meta {:property "og:image"     :content "http://www.jawaninja.com/img/jawaninja-pixel.png"}]
+  [:meta {:property "og:site_name" :content "Jawaninja"}]
+  [:meta {:property "fb:admins"    :content "565303681"}])
+
 ;; Blog pages
 
 (defpage "/" []
@@ -69,21 +78,10 @@
          (resp/redirect "/blog/page/1"))
 
 (defpage "/blog/page/:page-num" {:keys [page-num]}
-         (common/main-layout nil
-                             [(map post-item (posts/get-page page-num))
-                              (page-links page-num)]
-                             []))
+  (common/main-layout {:main [(map post-item (posts/get-page page-num))
+                              (page-links page-num)]}))
 
 (defpage "/blog/post/:moniker" {:keys [moniker]}
-         (let [{:keys [title] :as post} (posts/find-by-moniker moniker)]
-            (common/main-layout
-              '(
-               [:meta {:property "og:title" :content title}]
-               [:meta {:property "og:type" :content "website"}]
-               [:meta {:property "og:url" :content (str "http://www.jawaninja.com/blog/post/" moniker)}]
-               [:meta {:property "og:image" :content "http://www.jawaninja.com/img/jawaninja-pixel.png"}]
-               [:meta {:property "og:site_name" :content "Jawaninja"}]
-               [:meta {:property "fb:admins" :content "565303681"}]
-              )
-              [(post-item post :with-comments)]
-              [])))
+  (let [{:keys [title] :as post} (posts/find-by-moniker moniker)]
+    (common/main-layout {:head (facebook-meta title moniker)
+                         :main [(post-item post :with-comments)]})))
