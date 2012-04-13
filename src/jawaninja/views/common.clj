@@ -60,7 +60,7 @@
   )
 
 (defpartial about []
-    [:img {:id "about-img" :src "/img/profile.jpg" :alt "profile picture"}]
+    [:img {:id "about-img" :src "/img/profile.png" :alt "profile picture"}]
     [:h4 "About me"]
     [:p "I'm a passionate developer that loves programming, learning stuff, playing guitar, programming and home-brewing beer."])
 
