@@ -51,7 +51,7 @@
 (defn get-page [page]
   (let [page-num (dec (Integer. page)) ;; make it 1-based indexing
         offset (* page-num posts-per-page)]
-    (db-query ["SELECT * FROM posts ORDER BY created_at LIMIT ? OFFSET ?" posts-per-page offset])))
+    (db-query ["SELECT * FROM posts ORDER BY created_at DESC LIMIT ? OFFSET ?" posts-per-page offset])))
 
 (defn find-by-id [id]
   (first (db-query ["SELECT * FROM posts WHERE id = ?", id])))
