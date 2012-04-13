@@ -97,7 +97,10 @@
      [:div.span2
       [:div.row-fluid (about)]
       [:div.row-fluid (social)]
-      (map #(vec [:div.row-fluid %]) side)]]]])
+      (map #(vec [:div.row-fluid %]) side)]]]
+   ;;Meetup script
+   [:script {:type "text/javascript" :src "https://secure.meetup.com/4163300442513314929894/script/api/mu.btns.js?id=ash1vgrjcnrnoheshbg42urg35"}]
+   ])
 
 ;; Layouts
 
